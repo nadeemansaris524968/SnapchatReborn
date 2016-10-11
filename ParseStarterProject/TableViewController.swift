@@ -7,17 +7,100 @@
 //
 
 import UIKit
-import Parse
+import ParseUI
 
 class TableViewController: UITableViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var usernames = [String]()
     var recipientUsername = ""
 
+    func checkForMessages() {
+        
+        print("checking")
+        
+        let query = PFQuery(className: "image")
+        query.whereKey("recipientUsername", equalTo: (PFUser.currentUser()?.username)!)
+        query.findObjectsInBackgroundWithBlock { (images, error) in
+            
+            if error != nil {
+                print(error)
+            }
+            else {
+                if let pfObject = images {
+                    
+                    if pfObject.count > 0 {
+                    
+                        let imageView:PFImageView = PFImageView()
+                        imageView.file = pfObject[0]["photo"] as? PFFile
+                        imageView.loadInBackground({ (photo, error) in
+                            
+                            if error != nil {
+                                print(error)
+                            }
+                            
+                            else {
+                                
+                                var senderUsername = "Unknown user"
+                                
+                                if let username = pfObject[0]["senderUsername"] as? String {
+                                    
+                                    senderUsername = username
+                                }
+                                
+                                let myAlert = UIAlertController(title: "You have a message!", message: "Message from \(senderUsername)", preferredStyle: UIAlertControllerStyle.Alert)
+                                myAlert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) in
+                                    
+                                    print("OK")
+                                    
+                                    let backgroundView = UIImageView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+                                    backgroundView.backgroundColor = UIColor.blackColor()
+                                    backgroundView.alpha = 0.8
+                                    backgroundView.tag = 10
+                                    backgroundView.contentMode = UIViewContentMode.ScaleAspectFit
+                                    self.view.addSubview(backgroundView)
+                                    
+                                    let displayedImage = UIImageView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+                                    displayedImage.image = photo
+                                    displayedImage.tag = 10
+                                    displayedImage.contentMode = UIViewContentMode.ScaleAspectFit
+                                    self.view.addSubview(displayedImage)
+                                    
+                                    pfObject[0].deleteInBackground()
+                                    
+                                    _ = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(TableViewController.hideMessage), userInfo: nil, repeats: false)
+                                    
+                                }))
+                                
+                                self.presentViewController(myAlert, animated: true, completion: nil)
+                            }
+                            
+                        })
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    func hideMessage() {
+        
+        for subview in self.view.subviews {
+            
+            if subview.tag == 10 {
+                
+                subview.removeFromSuperview()
+                
+            }
+            
+        }
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        _ = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(TableViewController.checkForMessages), userInfo: nil, repeats: true)
         
         
         let query = PFUser.query()
@@ -43,6 +126,8 @@ class TableViewController: UITableViewController, UINavigationControllerDelegate
         
 
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -74,7 +159,7 @@ class TableViewController: UITableViewController, UINavigationControllerDelegate
         
         recipientUsername = usernames[indexPath.row]
         
-        var image:UIImagePickerController = UIImagePickerController()
+        let image:UIImagePickerController = UIImagePickerController()
         image.delegate = self
         image.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
         image.allowsEditing = true
@@ -90,6 +175,12 @@ class TableViewController: UITableViewController, UINavigationControllerDelegate
         imageToSend["photo"] = PFFile(name: "photo.jpg", data: UIImageJPEGRepresentation(image, 0.5)!)
         imageToSend["senderUsername"] = PFUser.currentUser()?.username
         imageToSend["recipientUsername"] = recipientUsername
+        
+        let acl = PFACL()
+        acl.publicReadAccess = true
+        acl.publicWriteAccess = true
+        
+        imageToSend.ACL = acl
         imageToSend.saveInBackground()
         
     }

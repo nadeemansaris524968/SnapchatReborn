@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6105942D1D9D9AA200863F71 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6105942C1D9D9AA200863F71 /* ParseUI.framework */; };
 		616671A11D91C17A00C8C5AF /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616671A01D91C17A00C8C5AF /* TableViewController.swift */; };
 		616671A31D91C43600C8C5AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 616671A21D91C43600C8C5AF /* Main.storyboard */; };
 		8136E54C1CB4D7DD0011D421 /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8136E54B1CB4D7DD0011D421 /* Launch.storyboard */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6105942C1D9D9AA200863F71 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		616671A01D91C17A00C8C5AF /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		616671A21D91C43600C8C5AF /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8136E54B1CB4D7DD0011D421 /* Launch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
@@ -47,6 +49,7 @@
 			files = (
 				81BA817F1A49E0F000E65899 /* libstdc++.6.dylib in Frameworks */,
 				81BA817B1A49E0E500E65899 /* SystemConfiguration.framework in Frameworks */,
+				6105942D1D9D9AA200863F71 /* ParseUI.framework in Frameworks */,
 				81BA81791A49E0DB00E65899 /* AudioToolbox.framework in Frameworks */,
 				81BA81771A49E0D500E65899 /* libsqlite3.dylib in Frameworks */,
 				81BA81711A49DB6800E65899 /* Parse.framework in Frameworks */,
@@ -99,6 +102,7 @@
 		81BA816A1A49DB5600E65899 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6105942C1D9D9AA200863F71 /* ParseUI.framework */,
 				81BA816B1A49DB6800E65899 /* Bolts.framework */,
 				81BA816C1A49DB6800E65899 /* Parse.framework */,
 				81BA816E1A49DB6800E65899 /* ParseFacebookUtils.framework */,
